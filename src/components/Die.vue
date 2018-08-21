@@ -8,7 +8,7 @@
 export default {
   name: 'Die',
   props: {
-    values: Number,
+    values: Array,
     position: Number
   },
   computed: {

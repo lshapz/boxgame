@@ -1,22 +1,32 @@
 <template>
-  <span class="box">
-   	{{value}}
+  <span class="box" @click="selectMe">
+   	{{value}} {{myState}}
   </span>
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: 'Box',
   props: {
-    value: Number
+    value: Number,
+    externalState: String
   },
   data(){
   	return {
-  		used: false,
-	    openSelectable: true,
-	    openInvalid: false,
-	    selected: false
+  		myState: "openSelectable"
   	}
+  },
+  watch: {
+    externalState(newVal) {
+      this.myState = newVal
+    }
+  },
+  methods: {
+    selectMe() {
+      this.$emit('select', this.value)
+    }
   }
 }
 </script>
@@ -26,5 +36,7 @@ export default {
 .box {
 	padding: 1px;
 	border: 1px solid red;
+  width: 20px;
+  height: 20px;
 }
 </style>
