@@ -1,7 +1,6 @@
 <template>
-  <span class="die">
-   {{myValue}}
-  </span>
+
+  <img :src="'http://dobbelsteen.virtuworld.net/img/' + myValue + 'c.gif'">
 </template>
 
 <script>
@@ -13,7 +12,8 @@ export default {
   },
   computed: {
     myValue(){
-      return this.values[this.position - 1]
+      let value = this.values[this.position - 1]
+      return value > 0 ? value : Math.floor(Math.random() * 6) + 1
     }
   }
 
@@ -22,8 +22,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.die {
+img {
+  max-height: 150px;
+
+}
+/*.die {
   border: 3px dotted black;
   padding: 4px;
-}
+  display:inline-block;
+}*/
 </style>
