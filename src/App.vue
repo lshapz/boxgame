@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <div style="font-size: 3rem; background-color:#4B0082; color:white;margin-bottom: 1%" v-show="gameOver">
+  <transition name="over">
+    <div id="gameOver" v-show="gameOver">
       Game Over!
     </div>
-
+  </transition>
 
     <div id="boxContainer">
-      <Box v-for="i in 9" :value="i" :key="i" :externalState="boxState[i-1]" @select="selectBox" />
+      <Box v-for="i in 9" :value="i" :key="i" :externalState="boxState[i-1]" @select="selectBox" :class="boxState[i-1]" />
     </div>
 
     <br />
@@ -40,7 +41,6 @@ export default {
     return {  
       diceValues: [0, 0],
       boxState: ["openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable"],
-      possibleStates: ["openSelectable", "openInvalid", "selected", "used"],
       canIRoll: true,
       canIConfirm: false,
       gameOver: false
@@ -75,11 +75,19 @@ export default {
       return this.availableArray.reduce((a,b)=>{return a+b})
     }
   },
+  beforeMount(){
+    this.rollDice()
+  },
   methods:{
     refresh(){
-      window.location.reload()
+      this.canIRoll = true
+      this.canIConfirm = false
+      this.gameOver = false
+      this.diceValues = [0, 0]
+      this.boxState = ["openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable", "openSelectable"]
+      this.rollDice()    
     },
-    rollDice(value){
+    rollDice(){
       let rollFirst = Math.floor(Math.random() * 6) + 1
       let rollSecond = Math.floor(Math.random() * 6) + 1
       Vue.set(this.diceValues, 0, rollFirst)
@@ -88,14 +96,13 @@ export default {
     },
     confirmBoxes(){
       this.canIConfirm = false
-      this.boxState = this.boxState.map((item, index)=>{
+      this.boxState = this.boxState.map((item)=>{
         if (item === "selected" || item === "used") {
           return "used"
         } else {
           return "openSelectable"
         } 
       })
-      console.log(this.boxState)
       this.canIRoll = true
     },
     selectBox(value) {
@@ -145,14 +152,12 @@ export default {
               return item
             }
           })
-          console.log(this.boxState)
           this.canIConfirm = true
         } else {
 
           
           var possibleCombos = this.combinations(this.availableArray, value)
           
-          console.log(possibleCombos)
           if (possibleCombos.length < 1 && !this.canIRoll) {
 
             this.gameOver = true
@@ -183,7 +188,7 @@ export default {
         }
       })
     },
-    totalLeftovers(value) {
+    totalLeftovers() {
       if (this.totalLeftovers < this.diceTotal) {
         this.gameOver = true
         // this.refresh
@@ -197,14 +202,15 @@ export default {
 
 #app {
     text-align: center;
-
 }
+
 #boxContainer {
-    margin-bottom: 1%;
+    margin-bottom: .5%;
     width: 100%;
 }
-Box {
-    width: 11vw;
+
+box-component {
+    width: 10vw;
 }
 
 .button {
@@ -223,5 +229,37 @@ Box {
   opacity: 0.6;
 }
 
+#gameOver {
+  font-size: 3rem; 
+  background-color:#4B0082; 
+  color:white;
+  margin-bottom: 1%
+}
+
+.over-enter-active, .over-leave-active {
+  transition: opacity 1s 
+}
+.over-enter, .over-leave-to {
+  opacity: 0;
+}
+
+.imageTransition-enter-active {
+    animation: shift-in 2s;
+}
+.imageTransition-leave-active {
+  animation: shift-in 2s reverse;
+}
+
+@keyframes shift-in {
+    0%   {transform:rotate(0deg);}
+    25%  {transform:rotate(90deg);}
+    50%  {transform:rotate(120deg);}
+    75%  {transform:rotate(180deg);}
+    100% {transform:rotate(360deg); }
+}
+
+.imageTransition-enter, .imageTransition-leave-to {
+  opacity: 0;
+}
 
 </style>

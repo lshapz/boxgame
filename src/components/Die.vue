@@ -1,6 +1,7 @@
 <template>
-
-  <img :src="'http://dobbelsteen.virtuworld.net/img/' + myValue + 'c.gif'">
+  <transition name="imageTransition" mode="out-in" appear css> 
+    <img :src="'http://dobbelsteen.virtuworld.net/img/' + myValue + 'c.gif'" :key="myValue">
+  </transition>
 </template>
 
 <script>
@@ -19,16 +20,24 @@ export default {
 
 }
 </script>
+<style>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
 img {
-  max-height: 150px;
-
+  height: 100px;
+  max-height: 115px;
+  padding-left: 20px;
 }
-/*.die {
-  border: 3px dotted black;
-  padding: 4px;
-  display:inline-block;
-}*/
+
+.imageTransition-appear-active, .imageTransition-enter-active {
+    animation: shift-in .15s;
+}
+
+@keyframes shift-in {
+    0%   {transform:rotate(0deg);}
+    25%  {transform:rotate(90deg);}
+    50%  {transform:rotate(120deg);}
+    75%  {transform:rotate(180deg);}
+    100% {transform:rotate(360deg); }
+}
+
 </style>

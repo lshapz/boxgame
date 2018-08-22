@@ -1,11 +1,11 @@
 <template>
-  <div class="box" :class="classObj" @click="selectMe">
-   	{{value}}
+  <div class="box" @click="selectMe">
+    {{value}}
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 
 export default {
   name: 'Box',
@@ -14,9 +14,9 @@ export default {
     externalState: String
   },
   data(){
-  	return {
-  		myState: "openSelectable"
-  	}
+    return {
+      myState: "openSelectable"
+    }
   },
   watch: {
     externalState(newVal) {
@@ -27,21 +27,9 @@ export default {
     selectMe() {
       this.$emit('select', this.value)
     }
-  },
-  computed: {
-    classObj(){
-      return {
-        usedBox: this.externalState == 'used',
-        selectedBox: this.externalState == 'selected',
-        invalidBox: this.externalState == 'openInvalid',
-        selectableBox: this.externalState == 'openSelectable'
-      }
-    }
   }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .box {
   padding: 1px;
@@ -50,32 +38,33 @@ export default {
   display: inline-block;
   text-align: center;
   font-size: 3rem;
+  transition: 1.5s;
 }
 
-.box.selectableBox {
+.box.openSelectable {
   border: 1px solid green;
   background-color: green;
   color: white;
 }
 
-.box.invalidBox {
+.box.openInvalid {
   border: 1px solid red;
   background-color: red;
   color: white;
 }
 
-.box.selectedBox {
+.box.selected {
   border: 1px solid blue;
   background-color: blue;
   color: white;
 }
 
-.box.usedBox {
+.box.used {
   border: 1px solid black;
   background-color: black;
+  color: black;
+}
+.box.used:hover {
   color: white;
 }
-
-
-
 </style>
